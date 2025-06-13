@@ -1,0 +1,12 @@
+certificates/*.csr
+certificates/*.ext
+certificates/*.jks
+certificates/*.key
+certificates/*.pem
+certificates/*.pfx
+software/*
+temp/*
+error_log
+server.properties
+logs/*
+state_file

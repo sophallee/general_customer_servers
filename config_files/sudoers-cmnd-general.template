@@ -1,0 +1,19 @@
+## Poweroff and reboot
+Cmnd_Alias POWER = /sbin/shutdown, /sbin/halt, /sbin/reboot, /sbin/poweroff
+
+## Logs
+Cmnd_Alias LOGS = /usr/bin/tail /var/log/*, /usr/bin/tail * /var/log/*, /bin/more /var/log/*, /bin/more * /var/log/*, \
+/bin/cat /var/log/*, /bin/cat /var/log/*, /bin/grep /var/log/*, /bin/grep * /var/log/*, /bin/dmesg, \
+/usr/bin/ls /var/log, /usr/bin/ls * /var/log, /usr/bin/ls /var/log/*/*, /usr/bin/ls * /var/log/*/*
+
+## Monitor
+Cmnd_Alias MONITOR = /sbin/iotop-c, /usr/sbin/iotop
+
+## Storage devices
+Cmnd_Alias STORAGE = /usr/bin/du, /usr/bin/lsblk
+
+# Switch users
+Cmnd_Alias SU_PICK = /bin/su pick -s /bin/bash, /bin/su - pick -s /bin/bash
+
+
+

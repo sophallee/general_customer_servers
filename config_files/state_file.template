@@ -1,0 +1,5 @@
+state_sys_settings=false
+state_software_download=false
+state_software_install=false
+state_acronis_install=false
+state_server_config=false

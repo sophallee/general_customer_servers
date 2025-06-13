@@ -1,0 +1,62 @@
+#!/bin/bash
+# variable to partition the data disk
+data_disk='/dev/vdb'
+data_lvm1_name='home'
+data_lvm1_size='G'
+data_lvm1_mnt_point="/home"
+data_lvm2_name='crash'
+data_lvm2_size='100%FREE'
+data_lvm2_mnt_point='/var/crash'
+
+# hostname and ip addresses
+# for the initial setup, modify the domain with the customer domain name
+# amend the license number. auto it uses the n88 license number.
+timezone='Australia'
+domain=''
+license=''
+server_name="desktop-$license"
+server_ip=''
+vmhost_name="vmhost-$license"
+vmhost_ip=''
+pmds_name="pmds-$license"
+pmds_ip=''
+webapps_name="webapps-$license"
+webapps_ip=''
+oem_name="oem-$license"
+oem_ip=''
+oem_check=true
+
+# Applications installation
+checksum_on=true
+# PWS versions
+#pws_update='ai_pws-3.0.0.0-0535677.war'
+# Acronis installation
+acronis_install=true
+acronis_account=''
+acronis_password=''
+acronis_datacentre='https://au1-cloud.acronis.com'
+acronis_token=''
+
+# username and password
+root_passwd=''
+autoit_passwd=''
+support_passwd=''
+# Dynamical added users
+user1_name=''
+user1_group=''
+user1_passwd=''
+user2_name=''
+user2_group=''
+user2_passwd=''
+user3_name=''
+user3_group=''
+user3_passwd=''
+max_users=10
+
+#encryption_passphrase=''
+#default_certificate_file="autoapps.cloud.jks"
+#default_certificate_passwd=''
+
+# SSH configuration
+ssh_permitted_network_internal=''
+ssh_permitted_network_external='203.220.33.220/32,118.127.63.128/28,43.242.70.32/27'

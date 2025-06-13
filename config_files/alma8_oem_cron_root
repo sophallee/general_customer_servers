@@ -1,0 +1,4 @@
+MAILTO=""
+#Maintenance Tasks
+@reboot      ~/bin/backup_partition_table.sh
+

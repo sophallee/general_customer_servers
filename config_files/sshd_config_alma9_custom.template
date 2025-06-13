@@ -1,0 +1,35 @@
+## Custom SSH rules
+Port SSHD_CONFIG_PORT
+
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication no
+KbdInteractiveAuthentication no
+
+
+# Localhost SSH rules
+Match Address 127.0.0.1 LocalPort SSHD_CONFIG_PORT
+    AllowUsers SSH_ALLOWED_LOCALHOST
+    PasswordAuthentication yes
+    PubkeyAuthentication yes
+
+# Internal SSH rules
+Match Address SSH_PERMITTED_NETWORK_INTERNAL LocalPort SSHD_CONFIG_PORT
+    AllowUsers SSH_ALLOWED_INTERNAL
+    PasswordAuthentication yes
+    PubkeyAuthentication yes
+
+# Permit only SFTP
+Match Group sftp_only
+    X11Forwarding no
+    AllowTcpForwarding no
+    AllowAgentForwarding no
+    ForceCommand internal-sftp 
+
+# External SSH rules
+Match Address SSH_PERMITTED_NETWORK_EXTERNAL LocalPort SSHD_CONFIG_PORT User nagios
+    AllowUsers nagios
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    AuthenticationMethods  publickey
+

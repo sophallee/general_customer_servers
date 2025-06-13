@@ -1,0 +1,4 @@
+MAILTO=""
+# Capture system information 
+@daily       ~/bin/capture_system_info.sh
+

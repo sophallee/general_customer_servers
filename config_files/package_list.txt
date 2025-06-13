@@ -1,0 +1,52 @@
+# Time server
+chrony
+
+# Monitoring, networking and compilation tools
+at
+autoconf 
+bind-utils
+bridge-utils
+curl
+dos2unix
+enscript
+ftp
+gcc 
+google-authenticator
+iotop 
+iotop-c 
+iputils
+lftp
+libnsl
+libxml2-devel
+lsof
+kernel-devel
+make 
+mailx
+mysql
+netcat
+net-tools
+nmon
+nss
+openssh-clients
+openssl-devel
+perf
+rsync 
+smem
+sshpass
+sysstat
+telnet 
+util-linux-user
+xmlstarlet 
+   
+# Servers
+cyrus-sasl-plain
+
+# Nagios dependencies
+glibc.i686 
+glibc-devel.i686
+libcurl.i686
+libgcc.i686
+libnsl.i686
+ncurses-devel.i686
+ncurses-libs.i686
+   
