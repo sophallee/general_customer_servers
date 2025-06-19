@@ -15,6 +15,6 @@ session    optional     pam_keyinit.so force revoke
 session    optional     pam_motd.so
 session    include      password-auth
 session    include      postlogin
-auth       required     pam_unix.so try_first_pass
-auth       [success=1   default=ignore] pam_access.so accessfile=/etc/security/access-local.conf
-auth       required     pam_google_authenticator.so
+#auth       required     pam_unix.so try_first_pass
+#auth       [success=1   default=ignore] pam_access.so accessfile=/etc/security/access-local.conf
+#auth       required     pam_google_authenticator.so

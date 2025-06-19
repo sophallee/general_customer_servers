@@ -44,9 +44,13 @@ check_if_empty "root_passwd" "$root_passwd"
 check_if_empty "autoit_passwd" "$autoit_passwd"
 check_if_empty "support_passwd" "$support_passwd"
 
-for subnet in $(echo $ssh_permitted_network_internal | sed 's/,/ /'); do
-    echo $subnet
-    check_private_ip_or_mask_cidr "$subnet"
+
+IFS=',' read -ra cidr_array <<< "$ssh_permitted_network_internal"
+
+for cidr in "${cidr_array[@]}"; do
+    echo "Checking $cidr"
+    check_private_ip_or_mask_cidr "$cidr"
+    # Put your check logic here
 done
 
 for (( i=1; i <= $max_users; i++ )); do 

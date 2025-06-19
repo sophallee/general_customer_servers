@@ -46,32 +46,40 @@ check_domain $sftp_host_external
 echo "   checking system variables."
 check_domain $domain
 check_timezone $timezone
-if [ $license_check = true ]; then check_license $license; fi
-echo "   checking host variables."
-check_hostname $vmhost_name
-check_hostname $pmds_name
-check_hostname $webapps_name
-if [ $hostname_ip_check = true ]; then 
-echo "   checking IP variables."
-    check_private_ip "$webapps_ip"
-    check_private_ip "$pmds_ip"
-    check_private_ip "$vmhost_ip"
+
+
+if [ ! -z  $pmds_ip ]; then
+    echo "   checking pmds variables."
+    check_hostname $pmds_name
+    check_private_ip $pmds_ip
+    add_hostname_to_etc_hosts "$pmds_ip" "$pmds_name" "$pmds_name.$domain"
 fi
 
-if [ $oem_check = true ]; then
-    echo "   checking oem vm variables."
+if [ ! -z  $webapps_ip ]; then
+    echo "   checking webapps variables."
+    check_hostname $webapps_name
+    check_private_ip $webapps_ip 
+    add_hostname_to_etc_hosts "$webapps_ip" "$webapps_name" "$webapps_name.$domain"
+fi
+
+
+if [ ! -z  $oem_ip ]; then
+    echo "   checking oem  variables."
     check_hostname $oem_name
-    if [ $hostname_ip_check = true ]; then 
-        check_private_ip $oem_ip 
-    fi
+    check_private_ip $oem_ip 
+    add_hostname_to_etc_hosts "$oem_ip" "$oem_name" "$oem_name.$domain"
+
+fi
+
+if [ ! -z $vmhost_ip ]; then
+    echo "   checking oem vm variables."
+    check_hostname $vmhost_name
+    check_private_ip $vmhost_ip
+    add_hostname_to_etc_hosts "$vmhost_ip" "$vmhost_name" "$vmhost_name.$domain"
+
 fi
 
 if [ ! -f "$script_dir/config_files/$package_list" ]; then log_error "file package_list.txt not found."; fi
-
-add_hostname_to_etc_hosts "$oem_ip" "$oem_name" "$oem_name.$domain"
-add_hostname_to_etc_hosts "$webapps_ip" "$webapps_name" "$webapps_name.$domain"
-add_hostname_to_etc_hosts "$pmds_ip" "$pmds_name" "$pmds_name.$domain"
-add_hostname_to_etc_hosts "$vmhost_ip" "$vmhost_name" "$vmhost_name.$domain"
 
 sftp_host_iso=''
 sftp_host_packages=''

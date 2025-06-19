@@ -1,6 +1,6 @@
 #!/bin/bash
 # variable to partition the data disk
-data_disk='/dev/vdb'
+data_disk='/dev/sdb'
 data_lvm1_name='home'
 data_lvm1_size='G'
 data_lvm1_mnt_point="/home"
@@ -24,10 +24,10 @@ webapps_name="webapps-$license"
 webapps_ip=''
 oem_name="oem-$license"
 oem_ip=''
-oem_check=true
+oem_check=false
 
 # Applications installation
-checksum_on=true
+checksum_on=false
 # PWS versions
 #pws_update='ai_pws-3.0.0.0-0535677.war'
 # Acronis installation
