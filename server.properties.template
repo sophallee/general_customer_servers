@@ -41,6 +41,7 @@ acronis_token=''
 root_passwd=''
 autoit_passwd=''
 support_passwd=''
+create_support_user=false
 # Dynamical added users
 user1_name=''
 user1_group=''

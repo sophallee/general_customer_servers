@@ -105,14 +105,15 @@ update_config_file '-i -e' 's/ocredit = .*/ocredit = 1/' /etc/security/pwquality
 
 echo " "
 echo "creating the users ... "
-
-groupadd sftp_only
-add_system_user pick "/etc/skel"
-add_to_group "pick" "sftp_only"
-
 update_password root "$root_passwd"
 update_password autoit "$autoit_passwd"
-update_password pick "$support_passwd"
+
+if [ $create_support_user = true ]; then
+    groupadd sftp_only
+    add_system_user pick "/etc/skel"
+    add_to_group "pick" "sftp_only"
+    update_password pick "$support_passwd"
+fi
 
 for (( i=1; i <= $max_users; i++ )); do 
     user_name="user${i}_name" 
@@ -169,9 +170,7 @@ if [ $state_server_config = false ]; then
     fi
 
     # increase the security limits
-    if ! grep -q "pick  -  nofile  10240" /etc/security/limits.conf; then
-        echo "pick  -  nofile  10240" >> /etc/security/limits.conf
-        echo "pick  -  nproc  10240" >> /etc/security/limits.conf
+    if ! grep -q "soft    core    10000000" /etc/security/limits.conf; then
         echo "*   soft    core    10000000" >> /etc/security/limits.conf
     fi
     update_config_file "-i" "s/DefaultLimitCORE=.*/DefaultLimitCORE=infinity/" "/etc/systemd/system.conf"
