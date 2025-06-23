@@ -1,6 +1,10 @@
 #!/bin/bash
-backup_path='/home/autoit/config'
+backup_path='~/config'
+
+if [ ! -d $backup_path ]; then
+    mkdir $backup_path
+fi
 
 while read blk_device; do 
-    sfdisk -d /dev/$blk_device > $backup_path/$blk_device.partition.table.backup.txt
+    sudo sfdisk -d /dev/$blk_device > $backup_path/$blk_device.partition.table.backup.txt
 done< <(lsblk | grep disk | awk '{print $1}')
