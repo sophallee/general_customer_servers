@@ -80,7 +80,9 @@ else
 fi
 
 create_directory certificates
-cp_file "/etc/skel/.bash*" /root 
+if [ ! -f '/root/.bash_profile' ]; then
+    cp_file "/etc/skel/.bash*" /root 
+fi
 
 stop_service "sssd"
 remove_file "/var/lib/sss/db/*"
