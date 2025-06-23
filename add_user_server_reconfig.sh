@@ -42,8 +42,6 @@ source "$script_dir/state_file"
 # username and password
 check_if_empty "root_passwd" "$root_passwd"
 check_if_empty "autoit_passwd" "$autoit_passwd"
-check_if_empty "support_passwd" "$support_passwd"
-
 
 IFS=',' read -ra cidr_array <<< "$ssh_permitted_network_internal"
 
@@ -109,6 +107,7 @@ update_password root "$root_passwd"
 update_password autoit "$autoit_passwd"
 
 if [ $create_support_user = true ]; then
+    check_if_empty "support_passwd" "$support_passwd"
     groupadd sftp_only
     add_system_user pick "/etc/skel"
     add_to_group "pick" "sftp_only"
