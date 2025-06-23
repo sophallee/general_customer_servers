@@ -6,5 +6,5 @@ if [ ! -d $backup_path ]; then
 fi
 
 while read blk_device; do 
-    sudo sfdisk -d /dev/$blk_device > $backup_path/$blk_device.partition.table.backup.txt
+    sudo sfdisk -d /dev/$blk_device | sudo tee $backup_path/$blk_device.partition.table.backup.txt
 done< <(lsblk | grep disk | awk '{print $1}')
