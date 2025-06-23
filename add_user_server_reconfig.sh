@@ -133,9 +133,9 @@ done
 
 echo -n "copy over the cron files  ... "
 cp_file config_files/alma8_oem_cron_autoit /var/spool/cron/autoit
-cp_file config_files/alma8_oem_cron_root /var/spool/cron/root
+cp_file config_files/alma8_oem_cron_aitscripts /var/spool/cron/aitscripts
 change_ownership /var/spool/cron/autoit autoit autoit
-change_ownership /var/spool/cron/root root root
+change_ownership /var/spool/cron/aitscripts aitscripts aitscripts
 change_permission "/var/spool/cron/*" 600
 
 create_directory "/home/$SUDO_USER/bin"
@@ -145,9 +145,9 @@ change_ownership /home/$SUDO_USER/config autoit autoit -R
 cp_file $script_dir/scripts/capture_system_info.sh /home/$SUDO_USER/bin
 change_permission "/home/$SUDO_USER/bin/capture_system_info.sh" 700
 
-create_directory "/root/bin"
-cp_file $script_dir/scripts/backup_partition_table.sh /root/bin
-change_permission /root/bin/backup_partition_table.sh 700
+create_directory "/home/aitscripts/bin"
+cp_file $script_dir/scripts/backup_partition_table.sh /home/aitscripts/bin
+change_permission /home/aitscripts/bin/backup_partition_table.sh 700
 
 if [ $state_server_config = false ]; then
 
