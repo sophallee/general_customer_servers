@@ -140,8 +140,8 @@ change_permission "/var/spool/cron/*" 600
 
 create_directory "/home/$SUDO_USER/bin"
 create_directory "/home/$SUDO_USER/config"
-change_ownership /home/$SUDO_USER/bin autoit autoit -R
-change_ownership /home/$SUDO_USER/config autoit autoit -R
+change_ownership /home/$SUDO_USER/bin $SUDO_USER $SUDO_USER -R
+change_ownership /home/$SUDO_USER/config $SUDO_USER $SUDO_USER -R
 cp_file $script_dir/scripts/capture_system_info.sh /home/$SUDO_USER/bin
 change_permission "/home/$SUDO_USER/bin/capture_system_info.sh" 700
 
@@ -225,6 +225,25 @@ if [ $state_server_config = false ]; then
     fi
     cp_file "config_files/pam-sshd.template" "/etc/pam.d/sshd"
 
+
+    # Strip trailing comma if present
+    ssh_permitted_network_internal="${ssh_permitted_network_internal%,}"
+
+    # Convert comma-separated string to newline-delimited list
+    IFS=',' read -ra subnets <<< "$ssh_permitted_network_internal"
+
+    # Start building access-local.conf content
+    {
+      echo "# Google Authenticator can be skipped on local network"
+      echo "+ : ALL : 127.0.0.1"
+      for subnet in "${subnets[@]}"; do
+        if [[ -n "$subnet" ]]; then
+          echo "+ : ALL : $subnet"
+        fi
+      done
+      echo "- : ALL : ALL"
+    } > security/access-local.conf
+
     echo -n "syncing time server ... "
     systemctl stop chronyd
     chronyd -q 'pool 2.almalinux.pool.ntp.org iburst'
@@ -271,3 +290,4 @@ fi
 fi
 
 change_ownership /home/autoit autoit autoit -R
+change_ownership /home/$SUDO_USER $SUDO_USER $SUDO_USER -R
