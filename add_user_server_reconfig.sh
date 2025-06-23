@@ -199,11 +199,29 @@ if [ $state_server_config = false ]; then
         cp_file "config_files/sshd_config_alma9_custom.template" /etc/ssh/sshd_config.d/sshd_custom_rules.conf
     fi  
 
-    cp_file "config_files/access-local.conf.template" "/etc/security/access-local.conf"
-    for mfa_exclude_network in $(echo "$ssh_permitted_network_internal" | sed "s/,/ /g"); do
-        echo "+ : ALL : $mfa_exclude_network" >> /etc/security/access-local.conf    
-    done
-    echo "- : ALL : ALL" >> /etc/security/access-local.conf
+    #cp_file "config_files/access-local.conf.template" "/etc/security/access-local.conf"
+    #for mfa_exclude_network in $(echo "$ssh_permitted_network_internal" | sed "s/,/ /g"); do
+    #    echo "+ : ALL : $mfa_exclude_network" >> /etc/security/access-local.conf    
+    #done
+    #echo "- : ALL : ALL" >> /etc/security/access-local.conf
+
+    # Strip trailing comma if present
+    ssh_permitted_network_internal="${ssh_permitted_network_internal%,}"
+
+    # Convert comma-separated string to newline-delimited list
+    IFS=',' read -ra subnets <<< "$ssh_permitted_network_internal"
+
+    # Start building access-local.conf content
+    {
+      echo "# Google Authenticator can be skipped on local network"
+      echo "+ : ALL : 127.0.0.1"
+      for subnet in "${subnets[@]}"; do
+        if [[ -n "$subnet" ]]; then
+          echo "+ : ALL : $subnet"
+        fi
+      done
+      echo "- : ALL : ALL"
+    } > /etc/security/access-local.conf
 
     update_config_file -i "s/SSHD_CONFIG_PORT/$sshd_config_port/g" /etc/ssh/sshd_config.d/sshd_custom_rules.conf
     update_config_file -i "s/SSH_ALLOWED_LOCALHOST/$ssh_allowed_localhost/g" /etc/ssh/sshd_config.d/sshd_custom_rules.conf
@@ -226,25 +244,6 @@ if [ $state_server_config = false ]; then
         cp_file "/etc/pam.d/sshd" "/etc/pam.d/sshd.original"; 
     fi
     cp_file "config_files/pam-sshd.template" "/etc/pam.d/sshd"
-
-
-    # Strip trailing comma if present
-    ssh_permitted_network_internal="${ssh_permitted_network_internal%,}"
-
-    # Convert comma-separated string to newline-delimited list
-    IFS=',' read -ra subnets <<< "$ssh_permitted_network_internal"
-
-    # Start building access-local.conf content
-    {
-      echo "# Google Authenticator can be skipped on local network"
-      echo "+ : ALL : 127.0.0.1"
-      for subnet in "${subnets[@]}"; do
-        if [[ -n "$subnet" ]]; then
-          echo "+ : ALL : $subnet"
-        fi
-      done
-      echo "- : ALL : ALL"
-    } > security/access-local.conf
 
     echo -n "syncing time server ... "
     systemctl stop chronyd
