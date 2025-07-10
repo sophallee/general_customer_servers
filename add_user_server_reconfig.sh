@@ -162,10 +162,7 @@ if [ $state_server_config = false ]; then
         echo "adding whatismyip script ... "
         echo 'PATH=$PATH:/usr/local/bin:/usr/local/sbin' > /etc/profile.d/addpath.sh
         if [ $? -ne 0 ]; then log_error "adding updating paths in /etc/profile.d/addpath.sh"; fi
-        echo '#!/bin/bash' > /usr/local/bin/whatismyip
-        if [ $? -ne 0 ]; then log_error "adding updating whatismyip script"; fi
-        echo 'dig +short myip.opendns.com @resolver1.opendns.com' >> /usr/local/bin/whatismyip
-        if [ $? -ne 0 ]; then log_error "adding updating whatismyip script"; fi
+        cp_file "$script_dir/scripts/whatismyip.sh" "/usr/local/bin/whatismyip"
         chmod 755 /usr/local/bin/whatismyip
         if [ $? -ne 0 ]; then log_error "error changing permission of whatismyip"; fi
     fi
