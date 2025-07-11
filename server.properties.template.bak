@@ -59,5 +59,5 @@ max_users=10
 #default_certificate_passwd=''
 
 # SSH configuration
-ssh_permitted_network_internal=''
+ssh_permitted_network_internal='192.168.68.0/22'
 ssh_permitted_network_external='203.220.33.220/32,118.127.63.128/28,43.242.70.32/27'
