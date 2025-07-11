@@ -2,10 +2,10 @@
 Port SSHD_CONFIG_PORT
 
 PermitRootLogin no
+StrictModes no
 PasswordAuthentication no
 PubkeyAuthentication no
 KbdInteractiveAuthentication no
-
 
 # Localhost SSH rules
 Match Address 127.0.0.1 LocalPort SSHD_CONFIG_PORT
@@ -14,10 +14,25 @@ Match Address 127.0.0.1 LocalPort SSHD_CONFIG_PORT
     PubkeyAuthentication yes
 
 # Internal SSH rules
-Match Address SSH_PERMITTED_NETWORK_INTERNAL LocalPort SSHD_CONFIG_PORT
+Match Address * LocalPort SSHD_CONFIG_PORT
     AllowUsers SSH_ALLOWED_INTERNAL
     PasswordAuthentication yes
     PubkeyAuthentication yes
+
+# External SSH rules
+Match Address 203.220.33.220/32,118.127.63.128/28,43.242.70.32/27 LocalPort SSHD_CONFIG_PORT User nagios
+    AllowUsers nagios
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    AuthenticationMethods  publickey
+
+# External SSH rules
+Match Address 203.220.33.220/32,118.127.63.128/28,43.242.70.32/27 LocalPort SSHD_CONFIG_PORT
+    AllowUsers SSH_ALLOWED_EXTERNAL
+    KbdInteractiveAuthentication yes
+    PasswordAuthentication yes
+    PubkeyAuthentication yes
+    AuthenticationMethods  keyboard-interactive publickey,keyboard-interactive
 
 # Permit only SFTP
 Match Group sftp_only
@@ -25,11 +40,3 @@ Match Group sftp_only
     AllowTcpForwarding no
     AllowAgentForwarding no
     ForceCommand internal-sftp 
-
-# External SSH rules
-Match Address SSH_PERMITTED_NETWORK_EXTERNAL LocalPort SSHD_CONFIG_PORT User nagios
-    AllowUsers nagios
-    PasswordAuthentication no
-    PubkeyAuthentication yes
-    AuthenticationMethods  publickey
-

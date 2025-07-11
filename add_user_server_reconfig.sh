@@ -196,11 +196,12 @@ if [ $state_server_config = false ]; then
         cp_file "config_files/sshd_config_alma9_custom.template" /etc/ssh/sshd_config.d/sshd_custom_rules.conf
     fi  
 
-    #cp_file "config_files/access-local.conf.template" "/etc/security/access-local.conf"
-    #for mfa_exclude_network in $(echo "$ssh_permitted_network_internal" | sed "s/,/ /g"); do
-    #    echo "+ : ALL : $mfa_exclude_network" >> /etc/security/access-local.conf    
-    #done
-    #echo "- : ALL : ALL" >> /etc/security/access-local.conf
+    cp_file "config_files/access-local.conf.template" "/etc/security/access-local.conf"
+    echo "+ : ALL : 127.0.0.1" >> /etc/security/access-local.conf 
+    for mfa_exclude_network in $(echo "$ssh_permitted_network_internal" | sed "s/,/ /g"); do
+        echo "+ : ALL : $mfa_exclude_network" >> /etc/security/access-local.conf    
+    done
+    echo "- : ALL : ALL" >> /etc/security/access-local.conf
 
     # Strip trailing comma if present
     ssh_permitted_network_internal="${ssh_permitted_network_internal%,}"
@@ -259,7 +260,7 @@ if [ $state_server_config = false ]; then
 
 if ! grep -q "kernel.core_pattern = $crash_dump_path/apps" /etc/sysctl.conf; then
 cat <<-'EOF' >> /etc/sysctl.conf
-kernel.core_pattern = /home/crash/apps/core-%e--%u-%g-%p-%t
+kernel.core_pattern = /var/crash/apps/core-%e--%u-%g-%p-%t
 EOF
 fi
     restart_service kdump
